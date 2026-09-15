@@ -1,1 +1,698 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#2f6e4f">
+<title>LKPD — Peta Masalah Penyiraman</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Fraunces:opsz,wght@9..144,600;9..144,700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#17291f;
+    --ink-soft:#4a5c50;
+    --leaf:#2f6e4f;
+    --leaf-dark:#1f4f39;
+    --sprout:#7fb069;
+    --clay:#a8703f;
+    --clay-soft:#f6ead8;
+    --paper:#fcfbf3;
+    --mist:#e7f0e4;
+    --line:#d5e0d2;
+    --shadow:0 18px 40px -22px rgba(23,41,31,.55);
+    --radius:16px;
+  }
+  *,*::before,*::after{box-sizing:border-box;}
+  html{-webkit-text-size-adjust:100%;}
+  body{
+    margin:0;
+    font-family:"DM Sans",system-ui,sans-serif;
+    font-size:16px;line-height:1.6;color:var(--ink);
+    background:
+      radial-gradient(circle at 8% 4%, rgba(127,176,105,.28) 0, rgba(127,176,105,0) 20rem),
+      radial-gradient(circle at 96% 90%, rgba(168,112,63,.18) 0, rgba(168,112,63,0) 18rem),
+      #e9f0e7;
+    padding-bottom:calc(84px + env(safe-area-inset-bottom));
+  }
+  h1,h2,h3{font-family:"Fraunces",Georgia,serif;font-weight:700;line-height:1.15;margin:0;}
+  p{margin:0;}
+  .wrap{width:100%;max-width:980px;margin:0 auto;padding:0 14px;}
 
+  /* ---------- Header ---------- */
+  .masthead{
+    background:linear-gradient(160deg,var(--leaf-dark) 0%, var(--leaf) 55%, #3c8259 100%);
+    color:#f2f7ef;padding:26px 0 24px;position:relative;overflow:hidden;
+  }
+  .masthead::after{
+    content:"";position:absolute;inset:auto 0 -1px 0;height:24px;
+    background:radial-gradient(circle at 12px -6px, var(--paper) 13px, transparent 14px) 0 0/28px 24px repeat-x;
+  }
+  .masthead .wrap{position:relative;z-index:2;}
+  .kicker{
+    display:inline-flex;align-items:center;gap:8px;
+    background:rgba(252,251,243,.16);border:1px solid rgba(252,251,243,.3);
+    padding:5px 12px;border-radius:999px;font-size:.8rem;font-weight:700;
+  }
+  .masthead h1{font-size:clamp(1.6rem,6vw,2.5rem);margin:12px 0 8px;color:#fff;}
+  .masthead p.lead{max-width:52ch;color:#dcead6;font-size:.96rem;}
+
+  .tank-row{display:flex;align-items:center;gap:14px;margin-top:20px;}
+  .tank{
+    flex:1;height:32px;border-radius:999px;background:rgba(11,30,22,.35);
+    border:1px solid rgba(252,251,243,.35);overflow:hidden;position:relative;
+  }
+  .tank-fill{height:100%;width:0%;background:linear-gradient(90deg,#3b8fb0,#6fc0b8 70%,var(--sprout));transition:width .4s cubic-bezier(.4,.9,.3,1);}
+  .tank-text{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:.8rem;font-weight:700;color:#fff;text-shadow:0 1px 3px rgba(0,0,0,.45);}
+
+  .id-grid{display:grid;gap:10px;grid-template-columns:1fr 1fr;margin-top:18px;}
+  .id-grid .full{grid-column:1/-1;}
+  .id-grid label{display:block;font-size:.8rem;font-weight:700;color:#d6e6d0;margin-bottom:5px;}
+
+  input[type=text],textarea{
+    width:100%;font:inherit;color:var(--ink);background:#fff;
+    border:1.5px solid var(--line);border-radius:12px;padding:11px 13px;outline:none;
+    transition:border-color .18s,box-shadow .18s;
+  }
+  textarea{min-height:78px;resize:vertical;line-height:1.55;}
+  input:focus,textarea:focus{border-color:var(--leaf);box-shadow:0 0 0 4px rgba(47,110,79,.16);}
+  ::placeholder{color:#93a294;}
+
+  main{padding:24px 0 10px;}
+
+  .intro-card{
+    background:var(--paper);border:1px solid var(--line);border-radius:var(--radius);
+    box-shadow:var(--shadow);padding:18px 18px;margin-top:6px;
+  }
+  .intro-card h2{font-size:1.3rem;}
+  .intro-card p.body{margin-top:8px;color:var(--ink-soft);font-size:.95rem;}
+  .legend{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px;}
+  .legend span{
+    display:inline-flex;align-items:center;gap:6px;font-size:.82rem;font-weight:700;
+    background:var(--mist);color:var(--leaf-dark);border-radius:999px;padding:6px 12px;
+  }
+  .legend .arrow-txt{color:var(--sprout);font-weight:900;}
+
+  /* ---------- Contoh ---------- */
+  .example{
+    margin-top:16px;border:1.5px dashed var(--clay);border-radius:var(--radius);
+    background:#fffaf1;padding:16px 16px;
+  }
+  .example .tag{
+    display:inline-flex;font-size:.78rem;font-weight:700;color:#7a4c22;
+    background:var(--clay-soft);border-radius:999px;padding:3px 11px;margin-bottom:10px;
+  }
+  .example-grid{display:flex;flex-direction:column;gap:10px;}
+  .example-cell{background:#fff;border:1px solid #ecd9bb;border-radius:10px;padding:10px 12px;}
+  .example-cell .k{font-size:.74rem;font-weight:700;color:#8a5a2c;text-transform:none;}
+  .example-cell .v{font-size:.87rem;color:#4a3a26;margin-top:2px;}
+  .example-arrow{display:none;text-align:center;color:var(--clay);font-size:1.1rem;}
+
+  /* ---------- Baris tabel ---------- */
+  #rows{display:flex;flex-direction:column;gap:14px;margin-top:18px;}
+  .row-card{
+    background:var(--paper);border:1px solid var(--line);border-radius:var(--radius);
+    box-shadow:var(--shadow);padding:16px 16px 14px;position:relative;
+  }
+  .row-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;}
+  .row-number{
+    display:inline-flex;align-items:center;gap:9px;font-weight:700;font-size:.9rem;color:var(--leaf-dark);
+  }
+  .row-number .badge{
+    width:26px;height:26px;border-radius:50%;background:var(--leaf);color:#fff;
+    display:grid;place-items:center;font-family:"Fraunces",serif;font-size:.9rem;
+  }
+  .row-del{
+    display:inline-flex;align-items:center;gap:6px;font:inherit;font-size:.8rem;font-weight:700;
+    color:#9c3b2c;background:none;border:1.5px solid #e6cfc9;border-radius:999px;
+    padding:5px 11px;cursor:pointer;transition:.15s;
+  }
+  .row-del:hover{background:#fdf1ee;border-color:#9c3b2c;}
+  .row-del:disabled{opacity:.35;cursor:not-allowed;}
+
+  .row-grid{display:flex;flex-direction:column;gap:12px;}
+  .field{flex:1;min-width:0;}
+  .field label{display:block;font-size:.82rem;font-weight:700;margin-bottom:6px;color:var(--ink);}
+  .arrow-col{display:none;}
+
+  /* ---------- Tambah baris ---------- */
+  .add-row{
+    display:flex;align-items:center;justify-content:center;gap:8px;
+    width:100%;margin-top:14px;padding:13px;font:inherit;font-weight:700;font-size:.92rem;
+    color:var(--leaf-dark);background:var(--mist);border:1.5px dashed var(--sprout);
+    border-radius:13px;cursor:pointer;transition:.15s;
+  }
+  .add-row:hover{background:#dcecd7;}
+
+  /* ---------- Simpulan ---------- */
+  .card{
+    background:var(--paper);border:1px solid var(--line);border-radius:var(--radius);
+    box-shadow:var(--shadow);padding:18px 16px;margin-top:22px;
+  }
+  .card h3{font-size:1.1rem;}
+  .field-block{margin-top:14px;}
+  .field-block label{display:block;font-size:.86rem;font-weight:700;margin-bottom:6px;}
+
+  details.tip{margin-top:14px;border:1px dashed var(--clay);border-radius:12px;background:#fffaf1;}
+  details.tip summary{cursor:pointer;list-style:none;padding:10px 14px;font-weight:700;font-size:.88rem;color:#7a4c22;}
+  details.tip summary::-webkit-details-marker{display:none;}
+  details.tip summary::before{content:"💡 ";}
+  details.tip p{padding:0 14px 12px;font-size:.88rem;color:#5e4830;}
+
+  /* ---------- Tombol & bar ---------- */
+  .btn{
+    display:inline-flex;align-items:center;justify-content:center;gap:8px;
+    font:inherit;font-weight:700;font-size:.9rem;border-radius:12px;padding:12px 16px;
+    cursor:pointer;border:1.5px solid transparent;transition:.15s;min-height:46px;
+  }
+  .btn-primary{background:var(--leaf);color:#fff;}
+  .btn-primary:hover{background:var(--leaf-dark);}
+  .btn-ghost{background:#fff;border-color:var(--line);color:var(--ink);}
+  .btn-ghost:hover{border-color:var(--leaf);}
+  .btn-danger{color:#9c3b2c;border-color:#e6cfc9;}
+  .btn-danger:hover{border-color:#9c3b2c;background:#fdf1ee;}
+  .btn-row{display:flex;flex-wrap:wrap;gap:10px;margin-top:18px;}
+  .btn-row .btn{flex:1 1 160px;}
+
+  .actionbar{
+    position:fixed;left:0;right:0;bottom:0;z-index:50;
+    background:rgba(252,251,243,.96);backdrop-filter:blur(10px);
+    border-top:1px solid var(--line);
+    padding:10px 14px calc(10px + env(safe-area-inset-bottom));
+    display:flex;gap:10px;
+  }
+  .actionbar .btn{flex:1;}
+
+  .toast{
+    position:fixed;left:50%;bottom:calc(92px + env(safe-area-inset-bottom));transform:translate(-50%,16px);
+    background:var(--ink);color:#fff;font-size:.88rem;font-weight:600;
+    padding:11px 18px;border-radius:999px;z-index:60;opacity:0;pointer-events:none;transition:.25s;
+    max-width:90vw;text-align:center;
+  }
+  .toast.show{opacity:1;transform:translate(-50%,0);}
+
+  :focus-visible{outline:3px solid var(--clay);outline-offset:2px;}
+  .print-only{display:none;}
+
+  @media (min-width:760px){
+    body{padding-bottom:0;}
+    .wrap{padding:0 24px;}
+    .masthead{padding:38px 0 32px;}
+    .id-grid{grid-template-columns:repeat(3,1fr);}
+    .id-grid .full{grid-column:auto;}
+    .actionbar{display:none;}
+    .desktop-actions{display:flex;}
+    main{padding:34px 0 44px;}
+
+    .row-grid{flex-direction:row;align-items:flex-start;}
+    .arrow-col{display:flex;align-items:center;justify-content:center;padding-top:30px;color:var(--sprout);font-size:1.3rem;flex:0 0 auto;}
+
+    .example-grid{flex-direction:row;align-items:stretch;}
+    .example-cell{flex:1;}
+    .example-arrow{display:flex;align-items:center;justify-content:center;color:var(--clay);font-size:1.2rem;flex:0 0 auto;}
+  }
+  .desktop-actions{display:none;gap:10px;margin-top:26px;}
+
+  @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important;}}
+
+  @media print{
+    @page{margin:14mm;}
+    body{background:#fff;padding:0;font-size:11pt;}
+    .actionbar,.desktop-actions,.add-row,.row-del,.toast,details.tip{display:none!important;}
+    .masthead{background:#fff;color:#000;border-bottom:3px solid #2f6e4f;padding:0 0 12px;}
+    .masthead::after{display:none;}
+    .masthead h1,.masthead p.lead,.id-grid label{color:#000;}
+    .kicker{border-color:#999;background:#fff;color:#000;}
+    .tank-row{display:none;}
+    .row-card,.intro-card,.card,.example{box-shadow:none;break-inside:avoid;}
+    textarea,input[type=text]{border:none;border-bottom:1px solid #999;border-radius:0;padding:2px 0;}
+    .print-only{display:block;}
+  }
+</style>
+</head>
+<body>
+
+<header class="masthead">
+  <div class="wrap">
+    <span class="kicker">🌱 LKPD Digital · Informatika</span>
+    <h1>Peta masalah penyiraman di lahanmu</h1>
+    <p class="lead">Susun temuanmu dari survei lapangan dalam satu alur: masalah yang terjadi, dampaknya, lalu kebutuhan solusi yang bisa dijawab alat penyiram otomatis.</p>
+
+    <div class="tank-row" role="group" aria-label="Kemajuan pengisian">
+      <div class="tank">
+        <div class="tank-fill" id="tankFill"></div>
+        <div class="tank-text" id="tankText">0 dari 0 bagian terisi</div>
+      </div>
+    </div>
+
+    <div class="id-grid">
+      <div>
+        <label for="nama">Nama</label>
+        <input type="text" id="nama" data-track autocomplete="name" placeholder="Nama lengkap">
+      </div>
+      <div>
+        <label for="kelas">Kelas</label>
+        <input type="text" id="kelas" data-track placeholder="Contoh: XI RPL 2">
+      </div>
+      <div class="full">
+        <label for="kelompok">Kelompok &amp; lokasi lahan yang disurvei</label>
+        <input type="text" id="kelompok" data-track placeholder="Contoh: Kelompok 3 — kebun sayur belakang sekolah">
+      </div>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+
+  <section class="intro-card">
+    <h2>Cara mengisi</h2>
+    <p class="body">Untuk setiap masalah yang kamu temukan di lapangan, isi tiga kotak secara berurutan: apa masalahnya, apa akibatnya, lalu data dan tindakan apa yang perlu dibaca dan dilakukan alat penyiram otomatis. Tambah baris baru untuk tiap masalah berbeda.</p>
+    <div class="legend">
+      <span>Masalah</span>
+      <span class="arrow-txt">→</span>
+      <span>Dampak</span>
+      <span class="arrow-txt">→</span>
+      <span>Kebutuhan Solusi</span>
+    </div>
+
+    <div class="example">
+      <span class="tag">Contoh yang sudah diisi</span>
+      <div class="example-grid">
+        <div class="example-cell">
+          <p class="k">Masalah</p>
+          <p class="v">Penyiraman dilakukan pagi dan sore pakai selang, tanpa melihat kondisi tanah.</p>
+        </div>
+        <div class="example-arrow">→</div>
+        <div class="example-cell">
+          <p class="k">Dampak</p>
+          <p class="v">Air terbuang saat tanah masih basah, dan petugas kebun kehilangan sekitar 1 jam setiap hari.</p>
+        </div>
+        <div class="example-arrow">→</div>
+        <div class="example-cell">
+          <p class="k">Kebutuhan Solusi</p>
+          <p class="v">Sensor kelembapan tanah membaca kondisi tiap 30 menit; pompa menyala otomatis hanya saat tanah kering.</p>
+        </div>
+      </div>
+    </div>
+
+    <details class="tip">
+      <summary>Bingung mulai dari mana?</summary>
+      <p>Tanyakan tiga hal ke petani atau penjaga kebun: siapa yang biasa menyiram, bagaimana ia menentukan waktunya, dan bagaimana ia tahu tanamannya sudah cukup air. Jawaban atas pertanyaan ketiga biasanya langsung menunjukkan masalahnya.</p>
+    </details>
+  </section>
+
+  <div id="rows"></div>
+
+  <button type="button" class="add-row" id="addRow">
+    <span aria-hidden="true">+</span> Tambah masalah lain
+  </button>
+
+  <section class="card">
+    <h3>Simpulan singkat</h3>
+    <div class="field-block">
+      <label for="q1">Dari semua masalah di tabelmu, mana yang paling mendesak diselesaikan lebih dulu? Jelaskan alasannya.</label>
+      <textarea id="q1" data-track style="min-height:100px" placeholder="Tulis 2–3 kalimat."></textarea>
+    </div>
+    <div class="field-block">
+      <label for="q2">Solusi mana di tabelmu yang paling mudah diterapkan dengan alat dan biaya yang ada sekarang?</label>
+      <textarea id="q2" data-track style="min-height:100px" placeholder="Tulis 2–3 kalimat."></textarea>
+    </div>
+  </section>
+
+  <div class="desktop-actions">
+    <button class="btn btn-primary" id="btnPdf">Unduh PDF</button>
+    <button class="btn btn-danger" id="btnHapus">Hapus semua jawaban</button>
+  </div>
+
+  <div class="print-only" style="margin-top:26px;font-size:10pt;color:#444;border-top:1px solid #999;padding-top:10px">
+    Nilai: ______ &nbsp;&nbsp;·&nbsp;&nbsp; Paraf guru: ______________ &nbsp;&nbsp;·&nbsp;&nbsp; Tanggal: ______________
+  </div>
+</main>
+
+<div class="actionbar">
+  <button class="btn btn-danger" id="btnHapusMobile">Hapus</button>
+  <button class="btn btn-primary" id="btnPdfMobile">Unduh PDF</button>
+</div>
+
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script>
+(function(){
+  "use strict";
+
+  var rowsBox = document.getElementById("rows");
+  var seq = 0;
+
+  /* ---------- Toast ---------- */
+  var toastEl = document.getElementById("toast"), toastTimer;
+  function toast(msg){
+    toastEl.textContent = msg;
+    toastEl.classList.add("show");
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(function(){ toastEl.classList.remove("show"); }, 2400);
+  }
+
+  /* ---------- Textarea tumbuh otomatis ---------- */
+  function autoGrow(el){
+    if (el.tagName !== "TEXTAREA") return;
+    el.style.height = "auto";
+    el.style.height = Math.max(el.scrollHeight, 78) + "px";
+  }
+
+  /* ---------- Kemajuan pengisian ---------- */
+  function getFields(){
+    return Array.prototype.slice.call(document.querySelectorAll("[data-track]"));
+  }
+
+  function updateProgress(){
+    var fields = getFields();
+    var done = fields.filter(function(f){ return f.value.trim().length > 0; }).length;
+    var total = fields.length;
+    var pct = total ? Math.round(done / total * 100) : 0;
+    document.getElementById("tankFill").style.width = pct + "%";
+    document.getElementById("tankText").textContent = done + " dari " + total + " bagian terisi · " + pct + "%";
+  }
+
+  /* ---------- Baris tabel ---------- */
+  function rowTemplate(id, n){
+    return '' +
+      '<article class="row-card" data-row="' + id + '">' +
+        '<div class="row-head">' +
+          '<span class="row-number"><span class="badge">' + n + '</span>Masalah ' + n + '</span>' +
+          '<button type="button" class="row-del" data-del="' + id + '">Hapus baris</button>' +
+        '</div>' +
+        '<div class="row-grid">' +
+          '<div class="field">' +
+            '<label for="problem-' + id + '">Masalah</label>' +
+            '<textarea id="problem-' + id + '" class="f-problem" data-track placeholder="Apa yang terjadi di lahan?"></textarea>' +
+          '</div>' +
+          '<div class="arrow-col" aria-hidden="true">→</div>' +
+          '<div class="field">' +
+            '<label for="impact-' + id + '">Dampak</label>' +
+            '<textarea id="impact-' + id + '" class="f-impact" data-track placeholder="Akibatnya bagi tanaman, air, atau tenaga kerja?"></textarea>' +
+          '</div>' +
+          '<div class="arrow-col" aria-hidden="true">→</div>' +
+          '<div class="field">' +
+            '<label for="solution-' + id + '">Kebutuhan Solusi</label>' +
+            '<textarea id="solution-' + id + '" class="f-solution" data-track placeholder="Sensor apa yang dibaca, dan tindakan apa yang dilakukan alat?"></textarea>' +
+          '</div>' +
+        '</div>' +
+      '</article>';
+  }
+
+  function renumber(){
+    var cards = rowsBox.querySelectorAll(".row-card");
+    cards.forEach(function(card, i){
+      card.querySelector(".row-number").innerHTML =
+        '<span class="badge">' + (i + 1) + '</span>Masalah ' + (i + 1);
+    });
+    var delButtons = rowsBox.querySelectorAll(".row-del");
+    delButtons.forEach(function(btn){ btn.disabled = (cards.length <= 1); });
+  }
+
+  function addRow(focus){
+    seq += 1;
+    var n = rowsBox.querySelectorAll(".row-card").length + 1;
+    rowsBox.insertAdjacentHTML("beforeend", rowTemplate(seq, n));
+    var card = rowsBox.querySelector('[data-row="' + seq + '"]');
+    card.querySelectorAll("textarea").forEach(function(t){
+      t.addEventListener("input", function(){ autoGrow(t); updateProgress(); });
+    });
+    card.querySelector(".row-del").addEventListener("click", function(){
+      if (rowsBox.querySelectorAll(".row-card").length <= 1) return;
+      if (!confirm("Hapus baris masalah ini?")) return;
+      card.remove();
+      renumber();
+      updateProgress();
+    });
+    renumber();
+    updateProgress();
+    if (focus){
+      card.scrollIntoView({behavior:"smooth", block:"center"});
+      card.querySelector("textarea").focus();
+    }
+  }
+
+  document.getElementById("addRow").addEventListener("click", function(){ addRow(true); });
+
+  /* ---------- Isian identitas & simpulan ---------- */
+  getFields().forEach(function(f){
+    f.addEventListener("input", function(){ autoGrow(f); updateProgress(); });
+  });
+
+  /* ---------- Baris awal ---------- */
+  addRow(false); addRow(false); addRow(false);
+
+  /* ---------- Hapus semua ---------- */
+  function hapusSemua(){
+    if (!confirm("Hapus seluruh jawaban pada lembar ini? Tindakan ini tidak bisa dibatalkan.")) return;
+    document.getElementById("nama").value = "";
+    document.getElementById("kelas").value = "";
+    document.getElementById("kelompok").value = "";
+    document.getElementById("q1").value = "";
+    document.getElementById("q2").value = "";
+    rowsBox.innerHTML = "";
+    seq = 0;
+    addRow(false); addRow(false); addRow(false);
+    document.querySelectorAll("textarea").forEach(autoGrow);
+    updateProgress();
+    document.getElementById("nama").focus();
+    window.scrollTo({top:0, behavior:"smooth"});
+    toast("Semua jawaban terhapus.");
+  }
+  document.getElementById("btnHapus").addEventListener("click", hapusSemua);
+  document.getElementById("btnHapusMobile").addEventListener("click", hapusSemua);
+
+  /* ---------- Pembuatan PDF ---------- */
+  var JSPDF_URL = "https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.2/jspdf.umd.min.js";
+  var pdfLoading = null;
+
+  function muatJsPdf(){
+    if (window.jspdf && window.jspdf.jsPDF) return Promise.resolve();
+    if (pdfLoading) return pdfLoading;
+    pdfLoading = new Promise(function(resolve, reject){
+      var s = document.createElement("script");
+      s.src = JSPDF_URL;
+      s.onload = resolve;
+      s.onerror = function(){ pdfLoading = null; reject(new Error("gagal memuat")); };
+      document.head.appendChild(s);
+    });
+    return pdfLoading;
+  }
+
+  function bersih(t){
+    return String(t || "")
+      .replace(/[\u2018\u2019]/g, "'")
+      .replace(/[\u201C\u201D]/g, '"')
+      .replace(/[\u2013\u2014]/g, "-")
+      .replace(/\u2192/g, "->")
+      .replace(/[^\x00-\xFF]/g, "")
+      .trim();
+  }
+
+  function ambilBaris(){
+    return Array.prototype.slice.call(rowsBox.querySelectorAll(".row-card")).map(function(card){
+      return {
+        masalah: card.querySelector(".f-problem").value.trim(),
+        dampak:  card.querySelector(".f-impact").value.trim(),
+        solusi:  card.querySelector(".f-solution").value.trim()
+      };
+    });
+  }
+
+  // Menggambar tabel dengan tinggi baris menyesuaikan panjang teks tiap sel.
+  function gambarTabelWrap(doc, kolom, baris, opsi){
+    var L = opsi.x, W = opsi.width, TOP = opsi.top, BOT = opsi.bottom;
+    var H = doc.internal.pageSize.getHeight();
+    var y = opsi.startY;
+    var pad = 2.6, fs = 9, lh = 4.1;
+
+    function xAwal(i){
+      var x = L;
+      for (var k = 0; k < i; k++) x += kolom[k].w;
+      return x;
+    }
+    var totalW = kolom.reduce(function(a,c){ return a + c.w; }, 0);
+
+    function gambarKepala(){
+      doc.setFillColor("#2f6e4f");
+      doc.rect(L, y, totalW, 8.5, "F");
+      doc.setFont("helvetica", "bold");
+      doc.setFontSize(fs);
+      doc.setTextColor("#ffffff");
+      kolom.forEach(function(k, i){
+        doc.text(k.judul, xAwal(i) + pad, y + 5.7);
+      });
+      y += 8.5;
+    }
+
+    function ruangHalaman(tinggi){
+      if (y + tinggi > H - BOT){
+        doc.addPage();
+        y = TOP;
+        gambarKepala();
+      }
+    }
+
+    gambarKepala();
+
+    baris.forEach(function(row, ri){
+      var teksBaris = kolom.map(function(k){
+        return doc.setFont("helvetica","normal").setFontSize(fs)
+          .splitTextToSize(bersih(row[k.key]) || "-", k.w - pad * 2);
+      });
+      var maxBaris = Math.max.apply(null, teksBaris.map(function(t){ return t.length; }));
+      var tinggiBaris = Math.max(10, maxBaris * lh + pad * 2);
+
+      ruangHalaman(tinggiBaris);
+
+      doc.setDrawColor("#cddbc9");
+      doc.setLineWidth(0.15);
+      if (ri % 2 === 1){
+        doc.setFillColor("#f3f8f1");
+        doc.rect(L, y, totalW, tinggiBaris, "F");
+      }
+
+      kolom.forEach(function(k, i){
+        doc.rect(xAwal(i), y, k.w, tinggiBaris);
+      });
+
+      doc.setFont("helvetica", "normal");
+      doc.setFontSize(fs);
+      doc.setTextColor("#1d3328");
+      kolom.forEach(function(k, i){
+        var lines = teksBaris[i];
+        lines.forEach(function(line, li){
+          doc.text(line, xAwal(i) + pad, y + pad + 3 + li * lh);
+        });
+      });
+
+      y += tinggiBaris;
+    });
+
+    return y;
+  }
+
+  function buatPdf(){
+    var tombolUtama = document.getElementById("btnPdf");
+    var tombolMobile = document.getElementById("btnPdfMobile");
+    [tombolUtama, tombolMobile].forEach(function(b){ if (b){ b.disabled = true; } });
+
+    muatJsPdf().then(function(){
+      gambarPdf();
+      toast("PDF terunduh.");
+    }).catch(function(){
+      toast("Pembuat PDF butuh internet. Membuka dialog cetak — pilih 'Simpan sebagai PDF'.");
+      setTimeout(function(){ window.print(); }, 1400);
+    }).then(function(){
+      [tombolUtama, tombolMobile].forEach(function(b){ if (b){ b.disabled = false; } });
+    });
+  }
+
+  function gambarPdf(){
+    var doc = new window.jspdf.jsPDF({ unit:"mm", format:"a4" });
+    var L = 16, R = 16, TOP = 18, BOT = 20;
+    var W = doc.internal.pageSize.getWidth();
+    var H = doc.internal.pageSize.getHeight();
+    var lebar = W - L - R;
+    var y = TOP;
+
+    function ruang(butuh){ if (y + butuh > H - BOT){ doc.addPage(); y = TOP; } }
+    function teks(isi, opt){
+      opt = opt || {};
+      doc.setFont("helvetica", opt.gaya || "normal");
+      doc.setFontSize(opt.ukuran || 10);
+      doc.setTextColor(opt.warna || "#1d3328");
+      var b = doc.splitTextToSize(bersih(isi) || "-", opt.lebar || lebar);
+      var tinggi = (opt.ukuran || 10) * 0.42 + 1.2;
+      for (var i = 0; i < b.length; i++){
+        ruang(tinggi);
+        doc.text(b[i], opt.x || L, y);
+        y += tinggi;
+      }
+    }
+
+    /* Kepala halaman */
+    doc.setFillColor("#2f6e4f");
+    doc.rect(0, 0, W, 26, "F");
+    doc.setFont("helvetica", "bold"); doc.setFontSize(15); doc.setTextColor("#ffffff");
+    doc.text("Peta Masalah Penyiraman", L, 13);
+    doc.setFont("helvetica", "normal"); doc.setFontSize(9);
+    doc.text("LKPD Informatika - Masalah, Dampak, dan Kebutuhan Solusi IoT", L, 20);
+    y = 36;
+
+    var nama = document.getElementById("nama").value.trim() || "-";
+    var kelas = document.getElementById("kelas").value.trim() || "-";
+    var kelompok = document.getElementById("kelompok").value.trim() || "-";
+    doc.setFillColor("#eef4ec");
+    doc.roundedRect(L, y - 5, lebar, 21, 2, 2, "F");
+    var yi = y;
+    teks("Nama: " + nama + "      Kelas: " + kelas, { gaya:"bold", ukuran:10, lebar: lebar - 8, x: L + 4 });
+    teks("Kelompok dan lokasi lahan: " + kelompok, { ukuran:9.5, lebar: lebar - 8, x: L + 4 });
+    y = yi + 20;
+
+    /* Tabel */
+    ruang(14);
+    teks("Tabel masalah, dampak, dan kebutuhan solusi", { gaya:"bold", ukuran:12.5, warna:"#1f4f39" });
+    y += 2;
+
+    var kolom = [
+      { key:"masalah", judul:"Masalah", w: lebar * 0.33 },
+      { key:"dampak",  judul:"Dampak",  w: lebar * 0.33 },
+      { key:"solusi",  judul:"Kebutuhan Solusi IoT", w: lebar * 0.34 }
+    ];
+    y = gambarTabelWrap(doc, kolom, ambilBaris(), { x:L, width:lebar, startY:y, top:TOP, bottom:BOT });
+
+    /* Simpulan */
+    y += 8;
+    ruang(14);
+    teks("Simpulan singkat", { gaya:"bold", ukuran:12.5, warna:"#1f4f39" });
+    y += 1;
+
+    teks("Masalah paling mendesak dan alasannya", { gaya:"bold", ukuran:9.5, warna:"#2f6e4f" });
+    teks(document.getElementById("q1").value.trim(), { ukuran:10.5 });
+    y += 3;
+    teks("Solusi paling mudah diterapkan sekarang", { gaya:"bold", ukuran:9.5, warna:"#2f6e4f" });
+    teks(document.getElementById("q2").value.trim(), { ukuran:10.5 });
+
+    /* Kolom penilaian guru */
+    y += 8;
+    ruang(20);
+    doc.setDrawColor("#cddbc9"); doc.setLineWidth(0.2); doc.line(L, y, W - R, y); y += 5;
+    teks("Catatan guru", { gaya:"bold", ukuran:10, warna:"#7a4c22" });
+    y += 12;
+    ruang(10);
+    doc.setDrawColor("#9aa89b");
+    doc.line(L, y, L + 50, y);
+    doc.line(L + 60, y, L + 110, y);
+    doc.line(L + 120, y, W - R, y);
+    y += 5;
+    teks("Nilai                                   Paraf                                     Tanggal", { ukuran:8.5, warna:"#6b7a6d" });
+
+    var total = doc.internal.getNumberOfPages();
+    for (var p = 1; p <= total; p++){
+      doc.setPage(p);
+      doc.setFont("helvetica", "normal"); doc.setFontSize(8); doc.setTextColor("#8a988b");
+      doc.text(bersih(nama) + " - Peta Masalah Penyiraman", L, H - 10);
+      doc.text("Halaman " + p + " dari " + total, W - R, H - 10, { align:"right" });
+    }
+
+    var berkas = "Peta-Masalah-Penyiraman-" +
+      (nama === "-" ? "siswa" : nama.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "")) + ".pdf";
+    doc.save(berkas);
+  }
+
+  document.getElementById("btnPdf").addEventListener("click", buatPdf);
+  document.getElementById("btnPdfMobile").addEventListener("click", buatPdf);
+
+  window.addEventListener("beforeunload", function(e){
+    var fields = getFields();
+    var ada = fields.some(function(f){ return f.value.trim().length > 0; });
+    if (ada){ e.preventDefault(); e.returnValue = ""; }
+  });
+
+  updateProgress();
+})();
+</script>
+</body>
+</html>
